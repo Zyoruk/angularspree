@@ -1,5 +1,11 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  PLATFORM_ID
+} from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { Order } from '../../../../core/models/order';
 import { ActivatedRoute } from '@angular/router';
@@ -21,25 +27,22 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
   isMobile = false;
   screenwidth: any;
   currency = environment.config.currency_symbol;
-  noImageUrl = 'assets/default/no-image-available.jpg';
+  noImageUrl = 'assets/default/image-placeholder.svg';
 
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
     private checkoutService: CheckoutService,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.routeSubscription$ = this.route.params.subscribe(
-      (params: Object) => {
-        this.orderNumber = params['number'];
-        this.orderSubscription$ =
-          this.userService
-            .getOrderDetail(this.orderNumber)
-            .subscribe(order => this.order = order);
-      }
-    );
+    this.routeSubscription$ = this.route.params.subscribe((params: Object) => {
+      this.orderNumber = params['number'];
+      this.orderSubscription$ = this.userService
+        .getOrderDetail(this.orderNumber)
+        .subscribe(order => (this.order = order));
+    });
     if (isPlatformBrowser(this.platformId)) {
       this.screenwidth = window.innerWidth;
     }
@@ -53,8 +56,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
   }
 
   getProductImageUrl(line_item: LineItem) {
-    const imageUrl = line_item.product.images[0];
-    return imageUrl ? imageUrl.product_url : this.noImageUrl;
+    const imageUrl = line_item.product.default_image;
+    return imageUrl ? imageUrl.default_product_url : this.noImageUrl;
   }
 
   ngOnDestroy() {

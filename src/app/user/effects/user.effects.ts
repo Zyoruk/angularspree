@@ -1,7 +1,6 @@
-
 import { switchMap, map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Effect, Actions } from '@ngrx/effects';
+import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { UserService } from '../services/user.service';
 import { UserActions } from '../actions/user.actions';
@@ -13,9 +12,9 @@ import { Address } from '../../core/models/address';
 
 @Injectable()
 export class UserEffects {
-
   @Effect()
-  GetUserOrders$ = this.actions$.ofType(UserActions.GET_USER_ORDERS).pipe(
+  GetUserOrders$ = this.actions$.pipe(
+    ofType(UserActions.GET_USER_ORDERS),
     switchMap<Action, Array<Order>>(_ => {
       return this.userService.getOrders();
     }),
@@ -23,7 +22,8 @@ export class UserEffects {
   );
 
   @Effect()
-  FetchUserAddress$ = this.actions$.ofType(UserActions.FETCH_USER_ADDRESS).pipe(
+  FetchUserAddress$ = this.actions$.pipe(
+    ofType(UserActions.FETCH_USER_ADDRESS),
     switchMap<Action, Array<Address>>(_ => {
       return this.addressService.getUserAddresses();
     }),
@@ -31,7 +31,8 @@ export class UserEffects {
   );
 
   @Effect()
-  FetchCountries$ = this.actions$.ofType(UserActions.FETCH_COUNTRIES).pipe(
+  FetchCountries$ = this.actions$.pipe(
+    ofType(UserActions.FETCH_COUNTRIES),
     switchMap<Action, Array<Country>>(_ => {
       return this.addressService.getCountires();
     }),
@@ -39,7 +40,8 @@ export class UserEffects {
   );
 
   @Effect()
-  FetchStates$ = this.actions$.ofType(UserActions.FETCH_STATES).pipe(
+  FetchStates$ = this.actions$.pipe(
+    ofType(UserActions.FETCH_STATES),
     switchMap<Action & { payload }, Array<CState>>(action => {
       return this.addressService.getAllStates(action.payload);
     }),
@@ -47,7 +49,8 @@ export class UserEffects {
   );
 
   @Effect()
-  DeleteUserAddress$ = this.actions$.ofType(UserActions.DELETE_ADDRESS).pipe(
+  DeleteUserAddress$ = this.actions$.pipe(
+    ofType(UserActions.DELETE_ADDRESS),
     switchMap<Action & { payload }, Object>(action => {
       return this.addressService.deleteAddress(action.payload);
     }),
@@ -59,6 +62,5 @@ export class UserEffects {
     private userService: UserService,
     private userActions: UserActions,
     private addressService: AddressService
-  ) { }
-
+  ) {}
 }

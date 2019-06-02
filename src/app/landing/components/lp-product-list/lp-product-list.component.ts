@@ -1,4 +1,3 @@
-import { SearchActions } from './../../../home/reducers/search.actions';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { AppState } from './../../../interfaces';
@@ -21,19 +20,9 @@ export class LpProductListComponent implements OnInit {
   @Input() dealsId;
   @Input() showRating: boolean;
 
-  constructor(
-    private searchActions: SearchActions,
-    private store: Store<AppState>,
-    private router: ActivatedRoute
-  ) {}
+  constructor(private store: Store<AppState>, private router: ActivatedRoute) {}
 
   ngOnInit() {}
 
-  getDeals() {
-    const search = new URLSearchParams();
-    search.set('id', this.dealsId);
-    this.store.dispatch(
-      this.searchActions.getProductsByTaxon(search.toString())
-    );
-  }
+  getDeals() {}
 }

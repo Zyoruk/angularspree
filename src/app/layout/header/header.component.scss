@@ -11,7 +11,7 @@
     }
     &:not(#main),
     &.page-scroll-header {
-      box-shadow: 0 8px 6px -8px $gray-900;
+      box-shadow: 0 1px 3px $gray-300;
       z-index: 1;
     }
     &#sub-header {
@@ -36,7 +36,7 @@
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
     filter: FlipH;
-    -ms-filter: "FlipH";
+    -ms-filter: 'FlipH';
   }
   &:hover {
     background-color: $theme-main-color - 20 !important;
@@ -54,7 +54,7 @@
 }
 
 :host /deep/ .dropdown-menu {
-  top: 3.1em !important
+  // top: 3.1em !important
 }
 
 .selected-theme .navbar {
@@ -82,14 +82,12 @@
 .mlogo {
   flex: 4;
   display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .cart {
   padding-top: 6px;
   padding-right: 10px;
-  flex: .5;
+  flex: 0.5;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -104,7 +102,7 @@
 }
 
 .small-logo img {
-  width: 120px;
+  width: 110px;
   margin-top: 0;
 }
 
@@ -153,7 +151,7 @@
 }
 
 .modal {
-  top: 2.7rem;
+  top: 2.5rem;
   .cat-mobile {
     border-radius: 0px;
     margin: 0px;
@@ -167,7 +165,7 @@
     }
     .modal-body {
       padding: 0px;
-      background-color: $white - 10
+      background-color: $white - 10;
     }
   }
 }
@@ -190,7 +188,7 @@
   height: 37px;
   margin: 0;
   top: -4.5px;
-  left: 6px
+  left: 6px;
 }
 
 label {
@@ -203,14 +201,14 @@ label {
 .main-nav-trigger {
   &:after,
   &:before {
-    content: "";
+    content: '';
     width: 20px;
     left: 50%;
     -webkit-transform: translateX(-50%);
     -ms-transform: translateX(-50%);
     transform: translateX(-50%);
-    -webkit-transition: transform .4s ease-out, transform-origin .4s ease-out;
-    transition: transform .4s ease-out, transform-origin .4s ease-out;
+    -webkit-transition: transform 0.4s ease-out, transform-origin 0.4s ease-out;
+    transition: transform 0.4s ease-out, transform-origin 0.4s ease-out;
   }
 }
 

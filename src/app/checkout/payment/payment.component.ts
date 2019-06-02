@@ -1,12 +1,27 @@
 import { Address } from './../../core/models/address';
-import { getTotalCartValue, getOrderNumber, getTotalCartItems, getShipAddress, getShipTotal, getItemTotal, getAdjustmentTotal } from './../reducers/selectors';
+import {
+  getTotalCartValue,
+  getOrderNumber,
+  getTotalCartItems,
+  getShipAddress,
+  getShipTotal,
+  getItemTotal,
+  getAdjustmentTotal
+} from './../reducers/selectors';
 import { AppState } from './../../interfaces';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  PLATFORM_ID
+} from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { CheckoutService } from '../../core/services/checkout.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-payment',
@@ -14,7 +29,6 @@ import { CheckoutService } from '../../core/services/checkout.service';
   styleUrls: ['./payment.component.scss']
 })
 export class PaymentComponent implements OnInit, OnDestroy {
-
   totalCartValue$: Observable<number>;
   totalCartItems$: Observable<number>;
   address$: Observable<Address>;
@@ -25,11 +39,26 @@ export class PaymentComponent implements OnInit, OnDestroy {
   currency = environment.config.currency_symbol;
   orderSub$: Subscription;
 
-  constructor(private store: Store<AppState>,
+  constructor(
+    private store: Store<AppState>,
     private checkoutService: CheckoutService,
-    private router: Router) { }
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const scriptjs = require('scriptjs');
+      scriptjs(
+        [
+          'https://checkout.stripe.com/checkout.js',
+          'https://checkout.razorpay.com/v1/checkout.js'
+        ],
+        'payments',
+        () => {}
+      );
+    }
+
     this.totalCartValue$ = this.store.select(getTotalCartValue);
     this.totalCartItems$ = this.store.select(getTotalCartItems);
     this.address$ = this.store.select(getShipAddress);
@@ -38,12 +67,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
     this.itemTotal$ = this.store.select(getItemTotal);
     this.adjustmentTotal$ = this.store.select(getAdjustmentTotal);
 
-    this.store.select(getTotalCartValue)
-      .subscribe(total => {
-        if (total === 0) {
-          this.router.navigate(['/checkout', 'cart']);
-        }
-      });
+    this.store.select(getTotalCartValue).subscribe(total => {
+      if (total === 0) {
+        this.router.navigate(['/checkout', 'cart']);
+      }
+    });
     this.orderSub$ = this.checkoutService.fetchCurrentOrder().subscribe();
   }
 
